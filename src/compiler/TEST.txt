@@ -1,0 +1,12 @@
+int main(void) {
+    ###
+    int a = 0;
+    float b = 20.1;
+    char c[] = "abcdefg";
+    char d = 'h';
+    if (a >= 2) {
+        b+=0.1;
+        a++;
+    }
+    return 0;
+}

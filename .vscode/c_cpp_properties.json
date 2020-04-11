@@ -1,0 +1,36 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "D:/Programming/mingw64/include",
+                "D:/Programming/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include",
+                "D:/Programming/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/ssp",
+                "D:/Programming/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/tr1",
+                "D:/Programming/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include-fixed",
+                "D:/Programming/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++",
+                "D:/Programming/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/backward",
+                "D:/Programming/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "intelliSenseMode": "msvc-x64",
+            "browse": {
+                "path": [
+                    "D:/Programming/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include",
+                    "D:/Programming/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/ssp",
+                    "D:/Programming/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/tr1",
+                    "D:/Programming/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include-fixed",
+                    "D:/Programming/mingw64/include/*"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            }
+        }
+    ],
+    "version": 4
+}

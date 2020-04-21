@@ -72,6 +72,9 @@ string Token::toString()
     case WordType::WORD_EOF:
         return "EOF";
 
+    case WordType::WORD_ANATATION:
+        return  value_;
+
     case WordType::WORD_NUM:
         return "NUM:, val= " + value_;
 

@@ -87,6 +87,7 @@ public:
 
     enum WordType
     {
+        WORD_ANATATION,
         WORD_SYMBOL,
         WORD_STRING,
         WORD_CHAR,

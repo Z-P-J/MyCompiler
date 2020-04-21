@@ -10,10 +10,21 @@ public:
     enum State //枚举类型，保存状态
     {
         START,
+        INANATATION,
+        INANATATION1,
+        INANATATION2,
         INNUM,
         INNUM1,
         INNUM2,
         INID,
+        IN_ADD,
+        IN_SUB,
+        // IN_MUL, // 
+        // IN_DIV, // 除法
+        // IN_GREATER, // 大于
+        // IN_LESS, // 小于
+        // IN_NOT, // !
+        // IN_EQ, // 等号 
         INCOMPARE,
         INOPERATE,
         INSTRING,

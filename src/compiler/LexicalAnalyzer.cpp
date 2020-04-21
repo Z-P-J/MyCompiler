@@ -29,27 +29,24 @@ void LexicalAnalyzer::analyze()
             char c = scanner_->getNextChar();
             // cout << "c=" << c << endl;
             bool rollback = true;
-            // if (c == '(' || c == ')' || c == '[' || c == ']' || c == '{' || c == '}' || c == ',' || c == ':' || c == ';') {
-            //     rollback = false;
-            //     currentState_ = DONE;
-            //     token.setWordType(Token::WordType::WORD_SYMBOL);
-            // } else 
-            if (c == EOF) {
+
+            if (c == EOF)
+            {
                 token.setWordType(Token::WordType::WORD_EOF);
                 rollback = false;
                 currentState_ = DONE;
             }
-            
-            
 
             switch (currentState_)
             {
             case START:
-            if (c == '(' || c == ')' || c == '[' || c == ']' || c == '{' || c == '}' || c == ',' || c == ':' || c == ';') {
-                rollback = false;
-                currentState_ = DONE;
-                token.setWordType(Token::WordType::WORD_SYMBOL);
-            } else if (c == ' ' || c == '\n' || c == '\t')
+                if (c == '(' || c == ')' || c == '[' || c == ']' || c == '{' || c == '}' || c == ',' || c == ':' || c == ';')
+                {
+                    rollback = false;
+                    currentState_ = DONE;
+                    token.setWordType(Token::WordType::WORD_SYMBOL);
+                }
+                else if (c == ' ' || c == '\n' || c == '\t')
                     continue;
                 else if (isdigit(c))
                     currentState_ = INNUM;
@@ -57,8 +54,14 @@ void LexicalAnalyzer::analyze()
                     currentState_ = INID;
                 else if (c == '>' || c == '<' || c == '!' || c == '=')
                     currentState_ = INCOMPARE;
-                else if (c == '+' || c == '-' || c == '*' || c == '%')
+                else if (c == '*') //  || c == '/'
                     currentState_ = INOPERATE;
+                else if (c == '/')
+                    currentState_ = INANATATION;
+                else if (c == '+')
+                    currentState_ = IN_ADD;
+                else if (c == '-')
+                    currentState_ = IN_SUB;
                 else if (c == '\'')
                     currentState_ = INCHAR;
                 else if (c == '"')
@@ -68,6 +71,41 @@ void LexicalAnalyzer::analyze()
                     rollback = false;
                     token.setWordType(Token::WordType::WORD_ERROR);
                     currentState_ = DONE;
+                }
+                break;
+
+            case INANATATION:
+                if (c == '*') {
+                    // 是注释
+                    currentState_ = INANATATION1;
+                } else {
+                    // 不是注释，而是除法符号
+                    if (c == '=')
+                        rollback = false;
+                    currentState_ = DONE;
+                    token.setWordType(Token::WordType::WORD_SYMBOL);
+                }
+                break;
+
+            case INANATATION1:
+                if (c == '*') {
+                    currentState_ = INANATATION2;
+                } else if (c == EOF) {
+                    currentState_ = DONE;
+                    token.setWordType(Token::WordType::WORD_ERROR);
+                }
+                break;
+
+            case INANATATION2:
+                if (c == '/') {
+                    rollback = false;
+                    currentState_ = DONE;
+                    token.setWordType(Token::WordType::WORD_ANATATION);
+                } else if (c == EOF) {
+                    currentState_ = DONE;
+                    token.setWordType(Token::WordType::WORD_ERROR);
+                } else {
+                    currentState_ = INANATATION1;
                 }
                 break;
 
@@ -109,7 +147,16 @@ void LexicalAnalyzer::analyze()
                     currentState_ = DONE;
                 }
                 break;
-
+            case IN_ADD:
+                if (c == '+')
+                {
+                    rollback = false;
+                }
+            case IN_SUB:
+                if (c == '-')
+                {
+                    rollback = false;
+                }
             case INCOMPARE:
                 if (c == '=')
                     rollback = false;
@@ -149,8 +196,6 @@ void LexicalAnalyzer::analyze()
                     scanner_->rollback();
                 else
                     token.appendChar(c);
-                // if (!rollback)
-                //     token.appendChar(c);
                 cout << scanner_->getCurrentLine() << ": " << token.toString() << endl;
             }
             else

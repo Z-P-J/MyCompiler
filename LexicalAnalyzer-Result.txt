@@ -1,0 +1,107 @@
+1: void main(void){
+    1: Reserved Word: void
+    1: ID, name= main
+    1: (
+    1: Reserved Word: void
+    1: )
+    1: {
+2: int i#; int j; int k; int n;
+    2: Reserved Word: int
+    2: ID, name= i
+    2: ERROR: #
+    2: ;
+    2: Reserved Word: int
+    2: ID, name= j
+    2: ;
+    2: Reserved Word: int
+    2: ID, name= k
+    2: ;
+    2: Reserved Word: int
+    2: ID, name= n
+    2: ;
+3: while (n < 100){
+    3: Reserved Word: while
+    3: (
+    3: ID, name= n
+    3: <
+    3: NUM:, val= 100
+    3: )
+    3: {
+4: i = n / 100;
+    4: ID, name= i
+    4: =
+    4: ID, name= n
+    4: /
+    4: NUM:, val= 100
+    4: ;
+5: j = n / 100 - n/100/10*10; /* n/100 mod 10 */
+    5: ID, name= j
+    5: =
+    5: ID, name= n
+    5: /
+    5: NUM:, val= 100
+    5: -
+    5: ID, name= n
+    5: /
+    5: NUM:, val= 100
+    5: /
+    5: NUM:, val= 10
+    5: *
+    5: NUM:, val= 10
+    5: ;
+6: k = n - n/10*10; /* n mod 10 */
+    6: ID, name= k
+    6: =
+    6: ID, name= n
+    6: -
+    6: ID, name= n
+    6: /
+    6: NUM:, val= 10
+    6: *
+    6: NUM:, val= 10
+    6: ;
+7: if(i*100+j*10+k == i*i*i+j*j*j+k*k*k){
+    7: Reserved Word: if
+    7: (
+    7: ID, name= i
+    7: *
+    7: NUM:, val= 100
+    7: +
+    7: ID, name= j
+    7: *
+    7: NUM:, val= 10
+    7: +
+    7: ID, name= k
+    7: ==
+    7: ID, name= i
+    7: *
+    7: ID, name= i
+    7: *
+    7: ID, name= i
+    7: +
+    7: ID, name= j
+    7: *
+    7: ID, name= j
+    7: *
+    7: ID, name= j
+    7: +
+    7: ID, name= k
+    7: *
+    7: ID, name= k
+    7: *
+    7: ID, name= k
+    7: )
+    7: {
+8: output(n);
+    8: ID, name= output
+    8: (
+    8: ID, name= n
+    8: )
+    8: ;
+9: }
+    9: }
+10: }
+    10: }
+11: }
+    11: }
+    11: EOF

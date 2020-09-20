@@ -43,6 +43,23 @@
         "cstring": "cpp",
         "complex": "cpp",
         "ios": "cpp",
-        "xstring": "cpp"
+        "xstring": "cpp",
+        "iterator": "cpp",
+        "list": "cpp",
+        "queue": "cpp",
+        "xfacet": "cpp",
+        "xhash": "cpp",
+        "xiosbase": "cpp",
+        "xlocale": "cpp",
+        "xlocinfo": "cpp",
+        "xlocnum": "cpp",
+        "xmemory": "cpp",
+        "xmemory0": "cpp",
+        "xstddef": "cpp",
+        "xtr1common": "cpp",
+        "xutility": "cpp",
+        "xtree": "cpp",
+        "map": "cpp",
+        "strstream": "cpp"
     }
 }

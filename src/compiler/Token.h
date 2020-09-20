@@ -1,5 +1,5 @@
-#ifndef TOKEN_H
-#define TOKEN_H
+#ifndef _TOKEN_H_
+#define _TOKEN_H_
 
 #include "string"
 
@@ -10,79 +10,41 @@ public:
     enum TokenType
     {
         EMPTY,
-
-        // 错误、结束
         ENDFILE,
-        ERROR,
-        // 保留字
-        AUTO,
-        BREAK,
-        CASE,
-        CHAR,
-        CONST,
-        CONTINUE,
-        DEFAULT,
-        DO,
-        DOUBLE,
-        ELSE,
-        ENUM,
-        EXTERN,
-        FLOAT,
-        FOR,
-        GOTO,
-        IF,
-        INT,
-        LONG,
-        REGISTER,
-        RETURN,
-        SHORT,
-        SIGNED,
-        SIZEOF,
-        STATIC,
-        STRUCT,
-        SWITCH,
-        TYPEDEF,
-        UNION,
-        UNSIGNED,
-        VOID,
-        VOLATILE,
-        WHILE,
-        //其他token
-        ID,
-        NUM,
-        CHARACTER,
-        STRING,
-        // 特殊符号
-        //+、一、*、/、++、一、+=、-=、*=、<、<=、>、>=、=、！=、=、；、, 、（、）、[、]、
-        //{、}、/*、*/、：
-        PLUS,
-        MINUS,
-        TIMES,
-        OVER,
-        SELFPLUS,
-        SELEMINUS,
-        PLUSASSIGN,
-        MINUSASSIGN,
-        TIMESASSIGN,
-        LT,
-        LEQ,
-        GT,
-        GEQ,
-        EQ,
-        NEQ,
-        ASSIGN,
-        SEMT,
-        COVMMA,
-        LPAREN,
-        RPAREN,
-        LBRACKET,
-        RBRACKET,
-        LCBRACKET,
-        RCBRACKET,
-        LCOMMENT,
-        RCOMMENT,
-        COLON,
-        OOOOOOOO
+		ERROR,
+		IF, // if
+		ELSE, // else 
+		INT, // int
+		RETURN, // return
+		VOID, // void
+		WHILE, // while
+		ID, // id
+		NUM, // num
+		ASSIGN, // =
+		EQ, // ==
+		PLUS, // + 
+		MINUS, // -
+		TIMES, // *
+		OVER, // /
+
+        // 分号semicolon
+		SEMI, // ;
+
+        // 小括号parenthesis
+        // 中括号brackets
+        // 大括号brace
+        LPAREN, // ( 
+		RPAREN, // )
+		LBRACKET, // [
+		RBRACKET, // ]
+		LBRACE, // {
+		RBRACE, // }
+		COMMA, //,
+        LT, // <
+		GT, // >
+		GEQ, // >=
+		NEQ, // !=
+		LEQ // <=
     };
 
     enum WordType
@@ -102,69 +64,43 @@ public:
         TokenType tok;
     };
 
-    Word reservedWords[9] = {
+    Word reservedWords[6] = {
         {"if", TokenType::IF}, 
         {"int", TokenType::INT}, 
         {"else", TokenType::ELSE}, 
         {"return", TokenType::RETURN}, 
         {"void", TokenType::VOID}, 
-        {"while", TokenType::WHILE},
-        {"for", TokenType::FOR},
-        {"char", TokenType::CHAR},
-        {"float", TokenType::FLOAT}
+        {"while", TokenType::WHILE}
     };
 
     Word symbolWords[27] = {
-        {"(", TokenType::IF}, 
-        {")", TokenType::INT}, 
-        {"[", TokenType::ELSE}, 
-        {"]", TokenType::RETURN}, 
-        {"{", TokenType::VOID}, 
-        {"}", TokenType::WHILE},
-        {";", TokenType::WHILE},
-        {",", TokenType::WHILE},
-        {":", TokenType::WHILE},
+        {"[", TokenType::LBRACKET}, 
+        {"]", TokenType::RBRACKET}, 
+        {"(", TokenType::LPAREN}, 
+        {")", TokenType::RPAREN}, 
+        {"{", TokenType::LBRACE}, 
+        {"}", TokenType::RBRACE},
+        {";", TokenType::SEMI},
+        {",", TokenType::COMMA},
 
-        {"+", TokenType::IF}, 
-        {"-", TokenType::INT}, 
-        {"*", TokenType::ELSE}, 
-        {"/", TokenType::RETURN}, 
-        {"<", TokenType::VOID}, 
-        {">", TokenType::VOID}, 
-        {"!", TokenType::VOID}, 
-        {"=", TokenType::VOID}, 
-        {"++", TokenType::WHILE},
-        {"--", TokenType::WHILE},
-        {"+=", TokenType::WHILE},
-        {"-=", TokenType::WHILE},
-        {"*=", TokenType::WHILE},
-        {"/=", TokenType::WHILE},
-        {"<=", TokenType::VOID}, 
-        {">=", TokenType::VOID}, 
-        {"!=", TokenType::VOID}, 
-        {"==", TokenType::WHILE}
+        {"+", TokenType::PLUS}, 
+        {"-", TokenType::MINUS}, 
+        {"*", TokenType::TIMES}, 
+        {"/", TokenType::OVER}, 
+        {"<", TokenType::LT}, 
+        {">", TokenType::GT},
+        {"=", TokenType::ASSIGN}, 
+        // {"++", TokenType::WHILE},
+        // {"--", TokenType::WHILE},
+        // {"+=", TokenType::WHILE},
+        // {"-=", TokenType::WHILE},
+        // {"*=", TokenType::WHILE},
+        // {"/=", TokenType::WHILE},
+        {"<=", TokenType::LEQ}, 
+        {">=", TokenType::GEQ}, 
+        {"!=", TokenType::NEQ}, 
+        {"==", TokenType::EQ}
     };
-
-    // Word symbolWords[18] = {
-    //     {"+", IF}, 
-    //     {"-", INT}, 
-    //     {"*", ELSE}, 
-    //     {"/", RETURN}, 
-    //     {"<", VOID}, 
-    //     {">", VOID}, 
-    //     {"!", VOID}, 
-    //     {"=", VOID}, 
-    //     {"++", WHILE},
-    //     {"--", WHILE},
-    //     {"+=", WHILE},
-    //     {"-=", WHILE},
-    //     {"*=", WHILE},
-    //     {"/=", WHILE},
-    //     {"<=", VOID}, 
-    //     {">=", VOID}, 
-    //     {"!=", VOID}, 
-    //     {"==", WHILE}
-    // };
 
     Token();
     Token(std::string str);
@@ -176,13 +112,18 @@ public:
     void appendChar(char ch);
     std::string toString();
     void setWordType(WordType type);
+    WordType getWordType();
+    int getLine();
+    void setLine(int line);
 
 private:
     /* data */
+    int line_;
     std::string value_;
     TokenType type_;
-    WordType wordType_ = WordType::WORD_ERROR;
+    WordType wordType_;
     void parseType();
 };
+
 
 #endif

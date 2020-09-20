@@ -1,0 +1,84 @@
+Syntax tree:
+  Funck
+    VoidK
+    IdK: main
+    ParamsK
+      VoidK
+    CompK
+      Var_DeclK
+        IntK
+        IdK: i
+      Var_DeclK
+        IntK
+        IdK: j
+      Var_DeclK
+        IntK
+        IdK: k
+      Var_DeclK
+        IntK
+        IdK: n
+      While
+        Op: <
+          IdK: n
+          ConstK: 100
+        CompK
+          Assign
+            IdK: i
+            Op: /
+              IdK: n
+              ConstK: 100
+          Assign
+            IdK: j
+            Op: -
+              Op: /
+                IdK: n
+                ConstK: 100
+              Op: *
+                Op: /
+                  Op: /
+                    IdK: n
+                    ConstK: 100
+                  ConstK: 10
+                ConstK: 10
+          Assign
+            IdK: k
+            Op: -
+              IdK: n
+              Op: *
+                Op: /
+                  IdK: n
+                  ConstK: 10
+                ConstK: 10
+          If
+            Op: ==
+              Op: +
+                Op: +
+                  Op: *
+                    IdK: i
+                    ConstK: 100
+                  Op: *
+                    IdK: j
+                    ConstK: 10
+                IdK: k
+              Op: +
+                Op: +
+                  Op: *
+                    Op: *
+                      IdK: i
+                      IdK: i
+                    IdK: i
+                  Op: *
+                    Op: *
+                      IdK: j
+                      IdK: j
+                    IdK: j
+                Op: *
+                  Op: *
+                    IdK: k
+                    IdK: k
+                  IdK: k
+            CompK
+              CallK
+                IdK: output
+                ArgsK
+                  IdK: n

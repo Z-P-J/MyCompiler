@@ -4,10 +4,18 @@
 #include "Token.cpp"
 #include "iostream"
 #include "string"
+// #include "vector"
+#include "map"
+#include "fstream"
 
 using namespace std;
 
-LexicalAnalyzer::LexicalAnalyzer(char *filePath)
+// LexicalAnalyzer::LexicalAnalyzer(char *filePath)
+//     : scanner_(new CharScanner(filePath)), currentState_(START)
+// {
+// }
+
+LexicalAnalyzer::LexicalAnalyzer(string filePath)
     : scanner_(new CharScanner(filePath)), currentState_(START)
 {
 }
@@ -16,177 +24,145 @@ LexicalAnalyzer::~LexicalAnalyzer()
 {
 }
 
-void LexicalAnalyzer::analyze()
+char LexicalAnalyzer::getNextChar()
 {
-    // int lineCount = 1;
+    return scanner_->getNextChar();
+}
+
+vector<Token *> LexicalAnalyzer::analyze()
+{
+    cout << "\nLexicalAnalyzer starts to analyze...\n" << endl;
+    map<int, vector<Token *>> tokenMap;
     while (!scanner_->isEnd())
     {
-        // string token = "";
-        Token token;
+        Token *token = new Token;
         currentState_ = START;
+
         while (currentState_ != DONE)
         {
-            char c = scanner_->getNextChar();
-            // cout << "c=" << c << endl;
+            char c = getNextChar();
             bool rollback = true;
-
-            if (c == EOF)
-            {
-                token.setWordType(Token::WordType::WORD_EOF);
-                rollback = false;
-                currentState_ = DONE;
-            }
 
             switch (currentState_)
             {
             case START:
-                if (c == '(' || c == ')' || c == '[' || c == ']' || c == '{' || c == '}' || c == ',' || c == ':' || c == ';')
+                if (c == EOF)
+                {
+                    token->setWordType(Token::WordType::WORD_EOF);
+                    rollback = false;
+                    currentState_ = DONE;
+                }
+                else if (c == '(' || c == ')' || c == '[' || c == ']' || c == '{' || c == '}' || c == ',' || c == ';' || c == '*' || c == '+' || c == '-')
                 {
                     rollback = false;
                     currentState_ = DONE;
-                    token.setWordType(Token::WordType::WORD_SYMBOL);
+                    token->setWordType(Token::WordType::WORD_SYMBOL);
                 }
                 else if (c == ' ' || c == '\n' || c == '\t')
                     continue;
                 else if (isdigit(c))
-                    currentState_ = INNUM;
+                    currentState_ = IN_NUM;
                 else if (isalpha(c))
-                    currentState_ = INID;
+                    currentState_ = IN_ID;
                 else if (c == '>' || c == '<' || c == '!' || c == '=')
-                    currentState_ = INCOMPARE;
-                else if (c == '*') //  || c == '/'
-                    currentState_ = INOPERATE;
+                    currentState_ = IN_COMPARE;
                 else if (c == '/')
-                    currentState_ = INANATATION;
-                else if (c == '+')
-                    currentState_ = IN_ADD;
-                else if (c == '-')
-                    currentState_ = IN_SUB;
-                else if (c == '\'')
-                    currentState_ = INCHAR;
-                else if (c == '"')
-                    currentState_ = INSTRING;
+                    currentState_ = IN_ANATATION;
                 else
                 {
                     rollback = false;
-                    token.setWordType(Token::WordType::WORD_ERROR);
+                    token->setWordType(Token::WordType::WORD_ERROR);
                     currentState_ = DONE;
                 }
                 break;
 
-            case INANATATION:
-                if (c == '*') {
-                    // 是注释
-                    currentState_ = INANATATION1;
-                } else {
-                    // 不是注释，而是除法符号
+            case IN_ANATATION:
+                if (c == '*')
+                    currentState_ = IN_ANATATION1;
+                else
+                {
                     if (c == '=')
                         rollback = false;
                     currentState_ = DONE;
-                    token.setWordType(Token::WordType::WORD_SYMBOL);
+                    token->setWordType(Token::WordType::WORD_SYMBOL);
                 }
                 break;
 
-            case INANATATION1:
-                if (c == '*') {
-                    currentState_ = INANATATION2;
-                } else if (c == EOF) {
+            case IN_ANATATION1:
+                if (c == '*')
+                    currentState_ = IN_ANATATION2;
+                else if (c == EOF)
+                {
                     currentState_ = DONE;
-                    token.setWordType(Token::WordType::WORD_ERROR);
+                    token->setWordType(Token::WordType::WORD_ERROR);
                 }
                 break;
 
-            case INANATATION2:
-                if (c == '/') {
+            case IN_ANATATION2:
+                if (c == '/')
+                {
                     rollback = false;
                     currentState_ = DONE;
-                    token.setWordType(Token::WordType::WORD_ANATATION);
-                } else if (c == EOF) {
-                    currentState_ = DONE;
-                    token.setWordType(Token::WordType::WORD_ERROR);
-                } else {
-                    currentState_ = INANATATION1;
+                    token->setWordType(Token::WordType::WORD_ANATATION);
                 }
-                break;
-
-            case INNUM:
-                if (!isdigit(c))
+                else if (c == EOF)
                 {
-                    if (c == '.')
-                        currentState_ = INNUM1;
-                    else
-                    {
-                        token.setWordType(Token::WordType::WORD_NUM);
-                        currentState_ = DONE;
-                    }
+                    currentState_ = DONE;
+                    token->setWordType(Token::WordType::WORD_ERROR);
                 }
-                break;
-
-            case INNUM1:
-                if (isdigit(c))
-                    currentState_ = INNUM2;
                 else
-                {
-                    token.setWordType(Token::WordType::WORD_NUM);
-                    currentState_ = DONE;
-                }
+                    currentState_ = IN_ANATATION1;
                 break;
 
-            case INNUM2:
+            case IN_NUM:
+                // if (!isdigit(c))
+                // {
+                //     if (c == '.')
+                //         currentState_ = IN_NUM1;
+                //     else
+                //     {
+                //         token->setWordType(Token::WordType::WORD_NUM);
+                //         currentState_ = DONE;
+                //     }
+                // }
+
                 if (!isdigit(c))
                 {
-                    token.setWordType(Token::WordType::WORD_NUM);
+                    token->setWordType(Token::WordType::WORD_NUM);
                     currentState_ = DONE;
                 }
                 break;
 
-            case INID:
+            // case IN_NUM1:
+            //     if (isdigit(c))
+            //         currentState_ = IN_NUM2;
+            //     else
+            //     {
+            //         token->setWordType(Token::WordType::WORD_NUM);
+            //         currentState_ = DONE;
+            //     }
+            //     break;
+
+            // case IN_NUM2:
+            //     if (!isdigit(c))
+            //     {
+            //         token->setWordType(Token::WordType::WORD_NUM);
+            //         currentState_ = DONE;
+            //     }
+            //     break;
+
+            case IN_ID:
                 if (c != '_' && !isalpha(c) && !isdigit(c))
                 {
-                    token.setWordType(Token::WordType::WORD_SYMBOL);
+                    token->setWordType(Token::WordType::WORD_SYMBOL);
                     currentState_ = DONE;
                 }
                 break;
-            case IN_ADD:
-                if (c == '+')
-                {
-                    rollback = false;
-                }
-            case IN_SUB:
-                if (c == '-')
-                {
-                    rollback = false;
-                }
-            case INCOMPARE:
+            case IN_COMPARE:
                 if (c == '=')
                     rollback = false;
                 currentState_ = DONE;
-                token.setWordType(Token::WordType::WORD_SYMBOL);
-                break;
-
-            case INOPERATE:
-                if (c == '=')
-                    rollback = false;
-                currentState_ = DONE;
-                token.setWordType(Token::WordType::WORD_SYMBOL);
-                break;
-
-            case INCHAR:
-                if (c == '\'')
-                {
-                    rollback = false;
-                    token.setWordType(Token::WordType::WORD_CHAR);
-                    currentState_ = DONE;
-                }
-                break;
-
-            case INSTRING:
-                if (c == '"')
-                {
-                    rollback = false;
-                    currentState_ = DONE;
-                    token.setWordType(Token::WordType::WORD_STRING);
-                }
+                token->setWordType(Token::WordType::WORD_SYMBOL);
                 break;
             }
 
@@ -195,21 +171,60 @@ void LexicalAnalyzer::analyze()
                 if (rollback)
                     scanner_->rollback();
                 else
-                    token.appendChar(c);
-                cout << scanner_->getCurrentLine() << ": " << token.toString() << endl;
+                    token->appendChar(c);
+                if (token->getWordType() != Token::WordType::WORD_ANATATION)
+                {
+                    int currentLine = scanner_->getCurrentLine();
+                    token->setLine(currentLine);
+                    auto iter = tokenMap.find(currentLine);
+                    if (iter != tokenMap.end())
+                        iter->second.push_back(token);
+                    else
+                    {
+                        vector<Token *> tokens;
+                        tokens.push_back(token);
+                        tokenMap.insert(pair<int, vector<Token *>>(currentLine, tokens));
+                    }
+                }
             }
             else
-                token.appendChar(c);
+                token->appendChar(c);
         }
     }
+    cout << endl;
+    vector<Token *> tokens;
+
+    string output;
+    ofstream write;
+	write.open("./LexicalAnalyzer-Result.txt");
+    for (int i = 1; i <= scanner_->getLines().size(); i++)
+    {
+        write << i << ": " << scanner_->getLines()[i - 1] << endl;
+        cout << i << ": " << scanner_->getLines()[i - 1] << endl;
+
+        auto iter = tokenMap.find(i);
+        if (iter != tokenMap.end())
+        {
+            for (Token *token : iter->second)
+            {
+                cout << "    " << i << ": " << token->toString() << endl;
+                write << "    " << i << ": " << token->toString() << endl;
+                tokens.push_back(token);
+            }
+        }
+    }
+	write.close();
+    return tokens;
 }
 
-int main()
-{
-    char *path = "./src/compiler/TEST.txt";
-    LexicalAnalyzer analyzer(path);
-    analyzer.analyze();
+// int main()
+// {
+//     cout << "Please enter the file path:" << endl;
+// 	string path;
+// 	cin >> path;
+//     LexicalAnalyzer analyzer(path);
+//     analyzer.analyze();
 
-    system("pause");
-    return 0;
-}
+//     system("pause");
+//     return 0;
+// }

@@ -1,0 +1,11 @@
+void main(void){
+    int i#; int j; int k; int n;
+    while (n < 100){
+        i = n / 100;
+        j = n / 100 - n/100/10*10; /* n/100 mod 10 */
+        k = n - n/10*10; /* n mod 10 */
+        if(i*100+j*10+k == i*i*i+j*j*j+k*k*k){
+            output(n);
+        }
+    }
+}
